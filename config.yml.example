@@ -1,2 +1,4 @@
-apikey: APIKEY
-igg_project: PROJECT
+:apikey: 'APIKEY'
+:igg_project: 'PROJECT'
+:channel: 'channel_name'
+:nick: 'igg_bot_name'
