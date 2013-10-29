@@ -24,8 +24,8 @@ class Pledge
     @level = level
   end
 
-  # Hackey method to get all the pledges from indiegogo's shitty feed because they
-  # are annoying and don't have an API.
+  # Hackey method to get all the pledges from indiegogo's lame feed because they
+  # don't have an API.
   def self.get_all(proj)
     url = "http://www.indiegogo.com/project/partial/#{proj}?count=100&partial_name=activity_pledges"
     doc = Nokogiri::HTML(open(url))
