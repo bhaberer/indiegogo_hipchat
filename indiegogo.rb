@@ -64,19 +64,23 @@ class Pledge
   def cached?
     @@cache.key?(id)
   end
+
+  def self.log(text, project = @proj)
+     puts "[IGG] [#{Time.now.strftime("%Y.%m.%d@%H:%M:%S")}] #{text}"
+  end
 end
 
 # Spin up a hipChat client.
-puts "[Indiegogo] Spining up client for #{@proj}"
+Pledge.log("Spining up client for #{@proj}")
 client = HipChat::Client.new(@apikey)
 
 # Cache all the current pledges so the bot doesn't spam old shit.
-puts "[Indiegogo] Caching current pledges for #{@proj}"
+Pledge.log "Caching current pledges for #{@proj}"
 @pledges = Pledge.get_all(@proj).map(&:cache)
-puts "[Indiegogo] Cached #{@pledges.length} old pledges."
+Pledge.log "Cached #{@pledges.length} old pledges."
 
 # Let's start looking for pledges
-puts "[Indiegogo] Watching for new pledges for #{@proj}..."
+Pledge.log "Watching for new pledges for #{@proj}..."
 while true do
   queue = []
   # Post the new pledges to the channel and the terminal
@@ -84,7 +88,7 @@ while true do
     unless pledge.cached?
       queue << pledge.format_text
       pledge.cache
-      puts "[Indiegogo] New pledge cached."
+      Pledge.log "New pledge cached."
     end
   end
 
@@ -92,7 +96,7 @@ while true do
   exit if queue.length > 5
 
   queue.each do |post|
-    puts "[Indiegogo] #{post}"
+    Pledge.log "#{post}"
     client[@config[:channel]].send(@config[:nick], post, color: 'purple', notify: true)
   end
 
